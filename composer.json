@@ -1,0 +1,28 @@
+{
+  "name": "kronos/saml-ws-trust",
+  "type": "library",
+  "description": "Kronos Saml WS-Trust improvement of simplesamlphp",
+  "homepage": "https://github.com/kronostechnologies/saml-ws-trust",
+  "license": "MIT",
+  "keywords": [
+    "kronos",
+    "saml",
+    "ws-trust",
+    "wstrust",
+    "saml 2.0",
+    "saml 1.0"
+
+  ],
+  "autoload": {
+    "psr-4": {
+      "Kronos\\SamlWsTrust\\": "Kronos/SamlWsTrust"
+    }
+  },
+  "require": {
+    "php": "^5.6",
+    "simplesamlphp/simplesamlphp": "^1.14"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.3.*"
+  }
+}
