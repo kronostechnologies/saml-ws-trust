@@ -2,7 +2,7 @@
 
 namespace Kronos\Tests\SamlWsTrust\WSTrust;
 
-use Kronos\SamlWsTrust\WSTrust\CaimInterface;
+use Kronos\SamlWsTrust\WSTrust\ClaimInterface;
 use Kronos\SamlWsTrust\WSTrust\ProviderInterface;
 use Kronos\SamlWsTrust\WSTrust\Token, Kronos\SamlWsTrust\WSTrust\TokenValidator;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -269,7 +269,7 @@ class TokenValidatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	private function givenMandatoryClaim(){
-		$claim = $this->getMock(CaimInterface::class);
+		$claim = $this->getMock(ClaimInterface::class);
 		$claim->method('getName')->willReturn(self::A_CLAIM_NAME);
 		$claim->method('getValues')->willReturn([self::A_CLAIM_VALUE]);
 		$this->provider->method('getMandatoryClaims')->willReturn([$claim]);

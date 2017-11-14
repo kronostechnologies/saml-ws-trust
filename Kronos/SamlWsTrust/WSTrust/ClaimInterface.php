@@ -3,7 +3,7 @@
 namespace Kronos\SamlWsTrust\WSTrust;
 
 
-interface CaimInterface {
+interface ClaimInterface {
 
 	/**
 	 * @return string
