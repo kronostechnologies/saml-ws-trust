@@ -10,7 +10,7 @@
     "ws-trust",
     "wstrust",
     "saml 2.0",
-    "saml 1.0"
+    "saml 1.1"
 
   ],
   "autoload": {

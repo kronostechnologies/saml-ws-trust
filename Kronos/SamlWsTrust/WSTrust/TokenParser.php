@@ -45,6 +45,9 @@ class TokenParser {
 		$xpath->registerNamespace('saml1', 'urn:oasis:names:tc:SAML:1.0:assertion');
 
 		switch($this->_token_type){
+			case 'SAML_1_1':
+				$assertion =  $this->parseSAML1Assertion($xpath);
+				break;
 			case 'SAML_1_1_ENC':
 				$assertion =  $this->parseEncryptedSAML1Assertion($xpath);
 				break;
@@ -96,6 +99,23 @@ class TokenParser {
 		$decrypted_xml = SAML2_Utils::decryptElement($encrypted_data->item(0), $this->_input_key, array());
 
 		return new SAML1_Assertion($decrypted_xml);
+	}
+
+	/**
+	 * @param DOMXPath $xpath
+	 * @return SAML1_Assertion
+	 * @throws Exception
+	 */
+	protected function parseSAML1Assertion(DOMXpath $xpath){
+		$assertions = $xpath->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/saml1:Assertion');
+		if ($assertions->length > 1) {
+			throw new Exception('Only one assertion element supported.');
+		}
+		else if ($assertions->length === 0) {
+			throw new Exception('No assertion found element supported.');
+		}
+
+		return new SAML1_Assertion($assertions->item(0));
 	}
 
 	/**

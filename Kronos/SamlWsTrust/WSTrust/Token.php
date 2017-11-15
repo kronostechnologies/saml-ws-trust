@@ -106,7 +106,7 @@ class Token {
 	}
 
 	public static function isTokenType($token_type){
-		return in_array($token_type, ['SAML_1_1_ENC', 'SAML_2_0', 'SAML_2_0_ENC']);
+		return in_array($token_type, ['SAML_1_1_ENC', "SAML_1_1", 'SAML_2_0', 'SAML_2_0_ENC']);
 	}
 }
 
