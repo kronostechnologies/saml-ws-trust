@@ -11,6 +11,9 @@ use SAML2_Utils;
 
 class TokenParser {
 
+	/**
+	 * @var string
+	 */
 	private $_token_type;
 
 	/**
@@ -18,6 +21,10 @@ class TokenParser {
 	 */
 	private $_input_key;
 
+	/**
+	 * TokenParser constructor.
+	 * @param string $token_type
+	 */
 	function __construct($token_type){
 		if(!Token::isTokenType($token_type)){
 			throw new \InvalidArgumentException('Invalid $token_type');
@@ -135,6 +142,11 @@ class TokenParser {
 		return new SAML2_Assertion($assertions->item(0));
 	}
 
+	/**
+	 * @param DOMXPath $xpath
+	 * @return SAML2_Assertion
+	 * @throws Exception
+	 */
 	protected function parseEncryptedSAML2Assertion(DOMXpath $xpath){
 
 		if(!$this->_input_key) {

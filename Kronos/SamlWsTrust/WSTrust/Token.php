@@ -73,10 +73,16 @@ class Token {
 		$this->assertion = $assertion;
 	}
 
+	/**
+	 * @return array|bool
+	 */
 	public function getNameId(){
 		return $this->getAssertion()->getNameId();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getAttributes(){
 		return $this->getAssertion()->getAttributes();
 	}
@@ -101,10 +107,18 @@ class Token {
 		return $identifier;
 	}
 
+	/**
+	 * @param $assertion
+	 * @return bool
+	 */
 	public static function isAssertion($assertion){
 		return ($assertion instanceof SAML2_Assertion || $assertion instanceof SAML1_Assertion);
 	}
 
+	/**
+	 * @param $token_type
+	 * @return bool
+	 */
 	public static function isTokenType($token_type){
 		return in_array($token_type, ['SAML_1_1_ENC', "SAML_1_1", 'SAML_2_0', 'SAML_2_0_ENC']);
 	}

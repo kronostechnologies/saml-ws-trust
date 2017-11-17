@@ -32,8 +32,11 @@ class SAML1_Assertion {
 	private $_certificates = array();
 	
 	private $_signatureData = null;
-	
-	
+
+	/**
+	 * SAML1_Assertion constructor.
+	 * @param DOMNode $assert_node
+	 */
 	public function __construct(DOMNode $assert_node){
 
 		$this->_assert_node = $assert_node;
@@ -48,7 +51,11 @@ class SAML1_Assertion {
 			$this->_certificates = $this->_signatureData['Certificates'];
 		}
 	}
-	
+
+	/**
+	 * The issuer or false if not found
+	 * @return string|bool
+	 */
 	public function getIssuer(){
 		$query = './@Issuer';
 		$nodelist = $this->_xpath->query($query, $this->_assert_node);
@@ -58,7 +65,11 @@ class SAML1_Assertion {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * The id or false if not found
+	 * @return string|bool
+	 */
 	public function getId(){
 		$query = './@AssertionID';
 		$nodelist = $this->_xpath->query($query, $this->_assert_node);
@@ -68,7 +79,11 @@ class SAML1_Assertion {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * The name identifier value or false if not found
+	 * @return array|bool
+	 */
 	public function getNameId(){
 		$query = './saml:AttributeStatement/saml1:Subject/saml1:NameIdentifier';
 		$nodelist = $this->_xpath->query($query, $this->_assert_node);
@@ -79,7 +94,11 @@ class SAML1_Assertion {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * The issue instant timestamp or false if not found
+	 * @return string|bool
+	 */
 	public function getIssueInstant(){
 		$query = './@IssueInstant';
 		$nodelist = $this->_xpath->query($query, $this->_assert_node);
@@ -89,7 +108,12 @@ class SAML1_Assertion {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * The value as timestamp or false if not found
+	 *
+	 * @return string|bool
+	 */
 	public function getNotBefore(){
 		$query = './saml1:Conditions/@NotBefore';
 		$nodelist = $this->_xpath->query($query, $this->_assert_node);
@@ -99,7 +123,12 @@ class SAML1_Assertion {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * The value as timestamp or false if not found
+	 *
+	 * @return string|bool
+	 */
 	public function getNotOnOrAfter(){
 		$query = './saml1:Conditions/@NotOnOrAfter';
 		$nodelist = $this->_xpath->query($query, $this->_assert_node);
@@ -109,7 +138,10 @@ class SAML1_Assertion {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * @return array
+	 */
 	public function getValidAudiences(){
 		$audiences = array();
 		
@@ -121,7 +153,11 @@ class SAML1_Assertion {
 		
 		return $audiences;
 	}
-	
+
+	/**
+	 * @return array
+	 * @throws Exception
+	 */
 	public function getAttributes(){
 		$attributes = array();
 		
@@ -152,12 +188,18 @@ class SAML1_Assertion {
 		
 		return $attributes;
 	}
-	
+
+	/**
+	 * @return array
+	 */
 	public function getCertificates(){
 		return $this->_certificates;
 	}
-	
 
+	/**
+	 * @param XMLSecurityKey $key
+	 * @return bool
+	 */
 	public function validate(XMLSecurityKey $key) {
         if ($this->_signatureData === null) {
             return false;
