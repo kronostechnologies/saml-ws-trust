@@ -10,7 +10,7 @@ class Token {
 	/**
 	 * @var string
 	 */
-	private $tokenType;
+	private $tokenType = '';
 
 	/**
 	 * @var SAML1_Assertion|SAML2_Assertion
@@ -37,14 +37,14 @@ class Token {
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getTokenType() {
 		return $this->tokenType;
 	}
 
 	/**
-	 * @param mixed $token_type
+	 * @param string $token_type
 	 */
 	public function setTokenType($token_type) {
 		if(!self::isTokenType($token_type)){
@@ -55,14 +55,14 @@ class Token {
 	}
 
 	/**
-	 * @return mixed
+	 * @return SAML1_Assertion|SAML2_Assertion
 	 */
 	public function getAssertion() {
 		return $this->assertion;
 	}
 
 	/**
-	 * @param mixed $assertion
+	 * @param SAML1_Assertion|SAML2_Assertion $assertion
 	 */
 	public function setAssertion($assertion) {
 
