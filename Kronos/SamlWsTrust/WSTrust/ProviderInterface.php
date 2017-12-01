@@ -28,10 +28,5 @@ interface ProviderInterface {
 	/**
 	 * @return ClaimInterface[]
 	 */
-	public function getOptionalClaims();
-
-	/**
-	 * @return ClaimInterface[]
-	 */
 	public function getMandatoryClaims();
 }
