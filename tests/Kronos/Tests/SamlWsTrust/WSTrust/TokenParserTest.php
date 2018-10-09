@@ -2,18 +2,14 @@
 
 namespace Kronos\Tests\SamlWsTrust\WSTrust;
 
+use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use Kronos\SamlWsTrust\WSTrust\Token;
 use Kronos\SamlWsTrust\WSTrust\TokenParser;
+use SAML2\Assertion;
 
 class TokenParserTest extends \PHPUnit_Framework_TestCase {
-
-	/**
-	 * @var TokenParser
-	 */
-	private $parser;
-	private $assertion;
-
 	const MOCKS_PATH = __DIR__ . '/../../../Mocks/';
+
 	const VALID_SAML_11_RTSP_FILE = self::MOCKS_PATH . 'ValidSAML11RTSP.xml';
     const SAML_11_MANY_ASSERT_FILE = self::MOCKS_PATH . 'SAML11ManyAssertions.xml';
 	const SAML_11_NO_ASSERT_FILE = self::MOCKS_PATH . 'SAML11NoAssertion.xml';
@@ -150,5 +146,52 @@ class TokenParserTest extends \PHPUnit_Framework_TestCase {
         $this->expectExceptionMessage('No assertion found element supported.');
 
         $parser->parseToken($this->getSAML20NoAssertion());
+    }
+
+    public function test_NonXMLDocument_parseToken_ThrowsException()
+    {
+        $parser = new TokenParser('SAML_2_0');
+
+        $this->expectException(\PHPUnit_Framework_Error_Warning::class);
+
+        $parser->parseToken("non xml doc");
+    }
+
+    public function test_ValidSAML11RSTP_parseToken_TokenInstanceContainsAssertion()
+    {
+        $parser = new TokenParser('SAML_1_1');
+
+        $retVal = $parser->parseToken($this->getValidSAML11RTSP());
+
+        $this->assertInstanceOf(SAML1_Assertion::class, $retVal->getAssertion());
+    }
+
+    public function test_ValidSAML20RSTP_parseToken_TokenInstanceContainsAssertion()
+    {
+        $parser = new TokenParser('SAML_2_0');
+
+        $retVal = $parser->parseToken($this->getValidSAML20RTSP());
+
+        $this->assertInstanceOf(\SAML2_Assertion::class, $retVal->getAssertion());
+    }
+
+    public function test_UnencryptedSAML11RSTPNoInputKey_parseToken_ThrowsException()
+    {
+        $parser = new TokenParser('SAML_1_1_ENC');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unable to parse encrypted token without input key');
+
+        $parser->parseToken($this->getValidSAML11RTSP());
+    }
+
+    public function test_UnencryptedSAML20RSTPNoInputKey_parseToken_ThrowsException()
+    {
+        $parser = new TokenParser('SAML_2_0_ENC');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unable to parse encrypted token without input key');
+
+        $parser->parseToken($this->getValidSAML20RTSP());
     }
 }
