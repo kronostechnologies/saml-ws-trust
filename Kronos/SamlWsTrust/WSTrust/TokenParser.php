@@ -2,12 +2,12 @@
 
 namespace Kronos\SamlWsTrust\WSTrust;
 
-use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
-use SAML2_Assertion;
-use XMLSecurityKey;
 use DOMDocument;
 use DOMXPath;
+use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
+use SAML2_Assertion;
 use SAML2_Utils;
+use XMLSecurityKey;
 
 class TokenParser {
 
@@ -55,7 +55,7 @@ class TokenParser {
 			case 'SAML_1_1':
 				$assertion =  $this->parseSAML1Assertion($xpath);
 				break;
-			case 'SAML_1_1_ENC':
+            case 'SAML_1_1_ENC':
 				$assertion =  $this->parseEncryptedSAML1Assertion($xpath);
 				break;
 			case 'SAML_2_0':

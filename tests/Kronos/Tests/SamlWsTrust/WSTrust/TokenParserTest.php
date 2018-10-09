@@ -6,6 +6,7 @@ use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use Kronos\SamlWsTrust\WSTrust\Token;
 use Kronos\SamlWsTrust\WSTrust\TokenParser;
 use SAML2\Assertion;
+use XMLSecurityKey;
 
 class TokenParserTest extends \PHPUnit_Framework_TestCase {
 	const MOCKS_PATH = __DIR__ . '/../../../Mocks/';
@@ -14,9 +15,15 @@ class TokenParserTest extends \PHPUnit_Framework_TestCase {
     const SAML_11_MANY_ASSERT_FILE = self::MOCKS_PATH . 'SAML11ManyAssertions.xml';
 	const SAML_11_NO_ASSERT_FILE = self::MOCKS_PATH . 'SAML11NoAssertion.xml';
 
+	const SAML_11_ENC_MANY_ASSERT_FILE = self::MOCKS_PATH . 'SAML11EncManyAssertions.xml';
+	const SAML_11_ENC_NO_ASSERT_FILE = self::MOCKS_PATH . 'SAML11EncNoAssertion.xml';
+
 	const VALID_SAML_20_RTSP_FILE = self::MOCKS_PATH . 'ValidSAML20RTSP.xml';
     const SAML_20_MANY_ASSERT_FILE = self::MOCKS_PATH . 'SAML20ManyAssertions.xml';
     const SAML_20_NO_ASSERT_FILE = self::MOCKS_PATH . 'SAML20NoAssertion.xml';
+
+    const SAML_20_ENC_MANY_ASSERT_FILE = self::MOCKS_PATH . 'SAML20EncManyAssertions.xml';
+    const SAML_20_ENC_NO_ASSERT_FILE = self::MOCKS_PATH . 'SAML20EncNoAssertion.xml';
 
     const INVALID_TOKEN_TYPE = 'SAML99999';
 
@@ -50,6 +57,22 @@ class TokenParserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @return string
      */
+    protected function getSAML11EncManyAssertions()
+    {
+        return file_get_contents(self::SAML_11_ENC_MANY_ASSERT_FILE);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSAML11EncNoAssertion()
+    {
+        return file_get_contents(self::SAML_11_ENC_NO_ASSERT_FILE);
+    }
+
+    /**
+     * @return string
+     */
     protected function getValidSAML20RTSP()
     {
         return file_get_contents(self::VALID_SAML_20_RTSP_FILE);
@@ -69,6 +92,22 @@ class TokenParserTest extends \PHPUnit_Framework_TestCase {
     protected function getSAML20NoAssertion()
     {
         return file_get_contents(self::SAML_20_NO_ASSERT_FILE);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSAML20EncManyAssertions()
+    {
+        return file_get_contents(self::SAML_20_ENC_MANY_ASSERT_FILE);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSAML20EncNoAssertion()
+    {
+        return file_get_contents(self::SAML_20_ENC_NO_ASSERT_FILE);
     }
 
     public function test_TokenParserWithInvalidType_Construct_WillThrowInvalidArgumentException() {
@@ -185,6 +224,28 @@ class TokenParserTest extends \PHPUnit_Framework_TestCase {
         $parser->parseToken($this->getValidSAML11RTSP());
     }
 
+    public function test_SAML11EncManyAssertions_parseToken_ThrowsException()
+    {
+        $parser = new TokenParser('SAML_1_1_ENC');
+        $parser->setInputKey(new XMLSecurityKey(XMLSecurityKey::TRIPLEDES_CBC));
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Only one encrypted element supported.');
+
+        $parser->parseToken($this->getSAML11EncManyAssertions());
+    }
+
+    public function test_SAML11EncNoAssertion_parseToken_ThrowsException()
+    {
+        $parser = new TokenParser('SAML_1_1_ENC');
+        $parser->setInputKey(new XMLSecurityKey(XMLSecurityKey::TRIPLEDES_CBC));
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No encrypted element found');
+
+        $parser->parseToken($this->getSAML11EncNoAssertion());
+    }
+
     public function test_UnencryptedSAML20RSTPNoInputKey_parseToken_ThrowsException()
     {
         $parser = new TokenParser('SAML_2_0_ENC');
@@ -193,5 +254,27 @@ class TokenParserTest extends \PHPUnit_Framework_TestCase {
         $this->expectExceptionMessage('Unable to parse encrypted token without input key');
 
         $parser->parseToken($this->getValidSAML20RTSP());
+    }
+
+    public function test_SAML20EncManyAssertions_parseToken_ThrowsException()
+    {
+        $parser = new TokenParser('SAML_2_0_ENC');
+        $parser->setInputKey(new XMLSecurityKey(XMLSecurityKey::TRIPLEDES_CBC));
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Only one assertion element supported.');
+
+        $parser->parseToken($this->getSAML20EncManyAssertions());
+    }
+
+    public function test_SAML20EncNoAssertion_parseToken_ThrowsException()
+    {
+        $parser = new TokenParser('SAML_2_0_ENC');
+        $parser->setInputKey(new XMLSecurityKey(XMLSecurityKey::TRIPLEDES_CBC));
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No assertion found element supported.');
+
+        $parser->parseToken($this->getSAML20EncNoAssertion());
     }
 }
