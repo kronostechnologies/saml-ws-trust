@@ -1,0 +1,23 @@
+<wst:RequestSecurityTokenResponse
+        xmlns:wsse="http://.../oasis-200401-wss-wssecurity-secext-1.0.xsd"
+        xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+        xmlns:wsa="http://www.w3.org/2005/08/addressing"
+        xmlns:wst="http://docs.oasis-open.org/ws-sx/ws-trust/200512">
+    <wst:TokenType>
+        http://docs.oasis-open.org/wss/oasis-wss-saml-token-profile-1.1#SAMLV2.0</wst:TokenType>
+    <wst:RequestedSecurityToken>
+    </wst:RequestedSecurityToken>
+    <wst:RequestedAttachedReference>
+        <wsse:SecurityTokenReference>
+            <wsse:KeyIdentifier
+                    ValueType="http://.../wss/oasis-wss-saml-token-profile-1.1#SAMLID">
+                uuid-00000000-1111-2222-3333-444444444444
+            </wsse:KeyIdentifier>
+        </wsse:SecurityTokenReference>
+    </wst:RequestedAttachedReference>
+    <wsp:AppliesTo>
+        <wsa:EndpointReference>
+            <wsa:Address>http://localhost:7000/</wsa:Address>
+        </wsa:EndpointReference>
+    </wsp:AppliesTo>
+</wst:RequestSecurityTokenResponse>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wst:RequestSecurityTokenResponse xmlns:wst="http://schemas.xmlsoap.org/ws/2005/02/trust">
+    <wst:RequestedSecurityToken>
+        <saml:Assertion MajorVersion="1" MinorVersion="1" AssertionID="_aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" Issuer="test@wst" IssueInstant="2018-01-01T12:00:10.555Z" xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">
+            <saml:Conditions>
+                <saml:AudienceRestrictionCondition>
+                    <saml:Audience>https://localhost:8000/</saml:Audience>
+                </saml:AudienceRestrictionCondition>
+            </saml:Conditions>
+        </saml:Assertion>
+        <saml:Assertion MajorVersion="1" MinorVersion="1" AssertionID="_22222222-bbbb-cccc-dddd-eeeeeeeeeeee" Issuer="test@wst" IssueInstant="2018-01-01T12:00:10.555Z" xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion">
+            <saml:Conditions>
+                <saml:AudienceRestrictionCondition>
+                    <saml:Audience>https://localhost:8000/</saml:Audience>
+                </saml:AudienceRestrictionCondition>
+            </saml:Conditions>
+        </saml:Assertion>
+    </wst:RequestedSecurityToken>
+    <wst:TokenType>urn:oasis:names:tc:SAML:1.0:assertion</wst:TokenType>
+</wst:RequestSecurityTokenResponse>
