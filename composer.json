@@ -19,6 +19,7 @@
   },
   "require": {
     "php": "^5.6",
+    "ext-dom": "^5.6",
     "simplesamlphp/simplesamlphp": "1.14.17",
     "kronostechnologies/php-coding-standard": "^1.0.2"
   },
