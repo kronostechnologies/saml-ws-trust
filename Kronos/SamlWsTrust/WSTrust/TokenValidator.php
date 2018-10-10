@@ -1,6 +1,6 @@
 <?php
 
-namespace  Kronos\SamlWsTrust\WSTrust;
+namespace Kronos\SamlWsTrust\WSTrust;
 
 use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use SAML2_Assertion;
@@ -87,7 +87,9 @@ class TokenValidator
             $claim_values = $attributes[$claim->getName()];
             foreach ($claim->getValues() as $mandatory_claim_value) {
                 if (!in_array($mandatory_claim_value, $claim_values)) {
-                    $response->addValidationError('Value not found for claim ' . $claim->getName() . ': ' . $mandatory_claim_value);
+                    $response
+                        ->addValidationError('Value not found for claim ' . $claim->getName() . ': ' .
+                            $mandatory_claim_value);
                 }
             }
         }
@@ -106,7 +108,7 @@ class TokenValidator
         }
 
         $certificate = $certificates[0];
-        $fingerprint =  $this->getX509CertificateFingerprint($certificate);
+        $fingerprint = $this->getX509CertificateFingerprint($certificate);
         if (!in_array($fingerprint, $this->provider->getTrustedCertificates())) {
             $response->addValidationError("Certificate $fingerprint used for token signature is not trusted.");
             return;
@@ -138,8 +140,8 @@ class TokenValidator
     private function getX509CertificatePubKey($x509cert)
     {
         $x509cert = str_replace(array("\r", "\n"), "", $x509cert);
-        $x509cert = "-----BEGIN CERTIFICATE-----\n".chunk_split($x509cert, 64, "\n")."-----END CERTIFICATE-----\n";
-        $signKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type'=>'public'));
+        $x509cert = "-----BEGIN CERTIFICATE-----\n" . chunk_split($x509cert, 64, "\n") . "-----END CERTIFICATE-----\n";
+        $signKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'public'));
         $signKey->loadKey($x509cert, false, true);
         return $signKey;
     }

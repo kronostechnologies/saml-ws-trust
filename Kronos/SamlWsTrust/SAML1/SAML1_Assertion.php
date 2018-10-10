@@ -19,21 +19,21 @@ class SAML1_Assertion
      *
      * @var DOMNode
      */
-    private $_assert_node;
+    private $assertNode;
     
     /**
      *
      * @var DOMXpath
      */
-    private $_xpath;
+    private $xPath;
     
     /**
      * x509 signature certificates
      * @var array
      */
-    private $_certificates = array();
+    private $certificates = array();
     
-    private $_signatureData = null;
+    private $signatureData = null;
 
     /**
      * SAML1_Assertion constructor.
@@ -42,16 +42,16 @@ class SAML1_Assertion
     public function __construct(DOMNode $assert_node)
     {
 
-        $this->_assert_node = $assert_node;
+        $this->assertNode = $assert_node;
         $dom = $assert_node->ownerDocument;
 
-        $this->_xpath = new DOMXpath($dom);
-        $this->_xpath->registerNamespace('saml1', self::SAML_ASSERT_NS);
+        $this->xPath = new DOMXpath($dom);
+        $this->xPath->registerNamespace('saml1', self::SAML_ASSERT_NS);
         
-        $signatureData = SAML1_Util::validateElement($this->_assert_node);
+        $signatureData = SAML1_Util::validateElement($this->assertNode);
         if ($signatureData) {
-            $this->_signatureData = $signatureData;
-            $this->_certificates = $this->_signatureData['Certificates'];
+            $this->signatureData = $signatureData;
+            $this->certificates = $this->signatureData['Certificates'];
         }
     }
 
@@ -62,7 +62,7 @@ class SAML1_Assertion
     public function getIssuer()
     {
         $query = './@Issuer';
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         if ($attr = $nodelist->item(0)) {
             return $attr->value;
         } else {
@@ -77,7 +77,7 @@ class SAML1_Assertion
     public function getId()
     {
         $query = './@AssertionID';
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         if ($attr = $nodelist->item(0)) {
             return $attr->value;
         } else {
@@ -92,7 +92,7 @@ class SAML1_Assertion
     public function getNameId()
     {
         $query = './saml:AttributeStatement/saml1:Subject/saml1:NameIdentifier';
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         if ($attr = $nodelist->item(0)) {
             // Respect simplesamlphp interface.
             return array('Value' => $attr->textContent);
@@ -108,7 +108,7 @@ class SAML1_Assertion
     public function getIssueInstant()
     {
         $query = './@IssueInstant';
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         if ($attr = $nodelist->item(0)) {
             return SAML2_Utils::xsDateTimeToTimestamp($attr->value);
         } else {
@@ -124,7 +124,7 @@ class SAML1_Assertion
     public function getNotBefore()
     {
         $query = './saml1:Conditions/@NotBefore';
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         if ($attr = $nodelist->item(0)) {
             return SAML2_Utils::xsDateTimeToTimestamp($attr->value);
         } else {
@@ -140,7 +140,7 @@ class SAML1_Assertion
     public function getNotOnOrAfter()
     {
         $query = './saml1:Conditions/@NotOnOrAfter';
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         if ($attr = $nodelist->item(0)) {
             return SAML2_Utils::xsDateTimeToTimestamp($attr->value);
         } else {
@@ -156,7 +156,7 @@ class SAML1_Assertion
         $audiences = array();
         
         $query = './saml1:Conditions/saml1:AudienceRestrictionCondition/saml1:Audience';
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         foreach ($nodelist as $node) {
             $audiences[] = $node->textContent;
         }
@@ -174,7 +174,7 @@ class SAML1_Assertion
         
         $query = './saml:AttributeStatement/saml:Attribute';
 
-        $nodelist = $this->_xpath->query($query, $this->_assert_node);
+        $nodelist = $this->xPath->query($query, $this->assertNode);
         foreach ($nodelist as $node) {
             $attrib_name = $node->getAttribute('AttributeName');
             $attrib_namespace = $node->getAttribute('AttributeNamespace');
@@ -183,7 +183,7 @@ class SAML1_Assertion
                 $attrib_name = $attrib_namespace . '/' . $attrib_name;
             }
             
-            $subNodelist = $this->_xpath->query('./saml:AttributeValue', $node);
+            $subNodelist = $this->xPath->query('./saml:AttributeValue', $node);
             if ($subNode = $subNodelist->item(0)) {
                 $attrib_value = $subNode->textContent;
             } else {
@@ -205,7 +205,7 @@ class SAML1_Assertion
      */
     public function getCertificates()
     {
-        return $this->_certificates;
+        return $this->certificates;
     }
 
     /**
@@ -214,11 +214,11 @@ class SAML1_Assertion
      */
     public function validate(XMLSecurityKey $key)
     {
-        if ($this->_signatureData === null) {
+        if ($this->signatureData === null) {
             return false;
         }
 
-        SAML2_Utils::validateSignature($this->_signatureData, $key);
+        SAML2_Utils::validateSignature($this->signatureData, $key);
         return true;
     }
 }
