@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4032ef7c5f2faef559ce8036f1fe4b5",
+    "content-hash": "3cb75d9783e5c75141bbf0b876470eb5",
     "packages": [
         {
             "name": "kronostechnologies/php-coding-standard",
@@ -1711,7 +1711,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6"
+        "php": "^5.6",
+        "ext-dom": "*",
+        "ext-mcrypt": "*"
     },
     "platform-dev": []
 }
