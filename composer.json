@@ -23,8 +23,7 @@
     "ext-mcrypt": "*",
     "simplesamlphp/simplesamlphp": "1.14.17",
     "kronostechnologies/php-coding-standard": "^1.0.2",
-    "robrichards/xmlseclibs": "=1.4.2",
-    "simplesamlphp/saml2": "=1.9.1"
+    "robrichards/xmlseclibs": "=1.4.2"
   },
   "require-dev": {
     "phpunit/phpunit": "5.3.*"

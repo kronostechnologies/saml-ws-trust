@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cb75d9783e5c75141bbf0b876470eb5",
+    "content-hash": "1f218ec175c2b3b53dfc9eabe9f6f345",
     "packages": [
         {
             "name": "kronostechnologies/php-coding-standard",
