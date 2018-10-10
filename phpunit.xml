@@ -8,13 +8,14 @@
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
+
     <testsuite name="saml-ws-trust">
-        <directory suffix="Test.php">./tests/Kronos/Tests/SamlWSTrust</directory>
+        <directory suffix="Test.php">./tests/Kronos/Tests/SamlWsTrust</directory>
     </testsuite>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">Kronos/SamlWSTrust</directory>
+            <directory suffix=".php">Kronos/SamlWsTrust</directory>
         </whitelist>
     </filter>
 </phpunit>
