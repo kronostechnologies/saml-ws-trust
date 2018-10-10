@@ -2,8 +2,8 @@
 
 namespace Kronos\SamlWsTrust\WSTrust;
 
-use SAML2_Assertion;
-use XMLSecurityKey;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Assertion;
 
 class TokenValidator
 {
@@ -71,7 +71,7 @@ class TokenValidator
     }
 
     /**
-     * @param SAML1_Assertion|SAML2_Assertion $assertion
+     * @param Assertion $assertion
      * @param TokenValidatorResponse $response
      */
     private function validateMandatoryClaims($assertion, TokenValidatorResponse $response)
@@ -95,7 +95,7 @@ class TokenValidator
     }
 
     /**
-     * @param SAML1_Assertion|SAML2_Assertion $assertion
+     * @param Assertion $assertion
      * @param TokenValidatorResponse $response
      */
     private function validateSignature($assertion, TokenValidatorResponse $response)
@@ -134,7 +134,7 @@ class TokenValidator
     /**
      * Get XMLSecurityKey for X509Certificate base64 data found in xml elements.
      * @param string $x509cert
-     * @return \XMLSecurityKey
+     * @return XMLSecurityKey
      */
     private function getX509CertificatePubKey($x509cert)
     {

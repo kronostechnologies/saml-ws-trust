@@ -4,8 +4,8 @@ namespace Kronos\SamlWsTrust\WSTrust;
 
 use DOMDocument;
 use DOMXPath;
-use SAML2_Assertion;
-use XMLSecurityKey;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Assertion;
 
 class TokenParser
 {
@@ -76,7 +76,7 @@ class TokenParser
 
     /**
      * @param DOMXPath $xpath
-     * @return SAML2_Assertion
+     * @return Assertion
      * @throws Exception
      */
     protected function parseSAML2Assertion(DOMXpath $xpath)
@@ -88,12 +88,12 @@ class TokenParser
             throw new Exception('No assertion found element supported.');
         }
 
-        return new SAML2_Assertion($assertions->item(0));
+        return new Assertion($assertions->item(0));
     }
 
     /**
      * @param DOMXPath $xpath
-     * @return SAML2_Assertion
+     * @return Assertion
      * @throws Exception
      */
     protected function parseEncryptedSAML2Assertion(DOMXpath $xpath)

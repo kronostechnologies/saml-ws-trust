@@ -1,6 +1,6 @@
 <?php
 
-namespace  Kronos\SamlWsTrust\WSTrust;
+namespace Kronos\SamlWsTrust\WSTrust;
 
 class TokenValidatorResponse
 {
