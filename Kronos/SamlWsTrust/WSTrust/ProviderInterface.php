@@ -2,31 +2,31 @@
 
 namespace Kronos\SamlWsTrust\WSTrust;
 
+interface ProviderInterface
+{
 
-interface ProviderInterface {
+    /**
+     * @return string
+     */
+    public function getIdpUrl();
 
-	/**
-	 * @return string
-	 */
-	public function getIdpUrl();
+    /**
+     * @return string
+     */
+    public function getRpRealm();
 
-	/**
-	 * @return string
-	 */
-	public function getRpRealm();
+    /**
+     * @return array
+     */
+    public function getTrustedIssuers();
 
-	/**
-	 * @return array
-	 */
-	public function getTrustedIssuers();
+    /**
+     * @return string[]
+     */
+    public function getTrustedCertificates();
 
-	/**
-	 * @return string[]
-	 */
-	public function getTrustedCertificates();
-
-	/**
-	 * @return ClaimInterface[]
-	 */
-	public function getMandatoryClaims();
+    /**
+     * @return ClaimInterface[]
+     */
+    public function getMandatoryClaims();
 }

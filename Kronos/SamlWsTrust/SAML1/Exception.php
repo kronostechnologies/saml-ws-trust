@@ -2,6 +2,7 @@
 
 namespace  Kronos\SamlWsTrust\SAML1;
 
-class Exception extends \Exception {
-	
+class Exception extends \Exception
+{
+    
 }
