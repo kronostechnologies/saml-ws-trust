@@ -2,7 +2,6 @@
 
 namespace Kronos\SamlWsTrust\WSTrust;
 
-use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use SAML2_Assertion;
 use XMLSecurityKey;
 

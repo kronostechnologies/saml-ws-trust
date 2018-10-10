@@ -2,7 +2,6 @@
 
 namespace Kronos\SamlWsTrust\WSTrust;
 
-use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use SAML2_Assertion;
 
 class Token
@@ -14,14 +13,14 @@ class Token
     private $tokenType = '';
 
     /**
-     * @var SAML1_Assertion|SAML2_Assertion
+     * @var SAML2_Assertion
      */
     private $assertion;
 
     /**
      * Token constructor.
      * @param string $token_type
-     * @param SAML1_Assertion|SAML2_Assertion $assertion
+     * @param SAML2_Assertion $assertion
      */
     public function __construct($token_type, $assertion)
     {
@@ -59,7 +58,7 @@ class Token
     }
 
     /**
-     * @return SAML1_Assertion|SAML2_Assertion
+     * @return SAML2_Assertion
      */
     public function getAssertion()
     {
@@ -67,7 +66,7 @@ class Token
     }
 
     /**
-     * @param SAML1_Assertion|SAML2_Assertion $assertion
+     * @param SAML2_Assertion $assertion
      */
     public function setAssertion($assertion)
     {
@@ -131,6 +130,6 @@ class Token
      */
     public static function isTokenType($token_type)
     {
-        return in_array($token_type, ['SAML_1_1_ENC', "SAML_1_1", 'SAML_2_0', 'SAML_2_0_ENC']);
+        return in_array($token_type, ['SAML_2_0', 'SAML_2_0_ENC']);
     }
 }

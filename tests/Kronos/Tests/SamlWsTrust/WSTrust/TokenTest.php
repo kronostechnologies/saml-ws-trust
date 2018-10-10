@@ -2,7 +2,6 @@
 
 namespace Kronos\Tests\SamlWsTrust\WSTrust;
 
-use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use Kronos\SamlWsTrust\WSTrust\Token;
 use SAML2_Assertion;
 use SAML2_EncryptedAssertion;
@@ -30,25 +29,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     public function test_Saml20Token_getAttributes_WillReturnAssertionAttributes()
     {
         $this->givenSAML2Token();
-
-        $returnedAttributes = $this->token->getAttributes();
-
-        $this->assertEquals($this->assertion_attributes, $returnedAttributes);
-    }
-
-
-    public function test_SAML1Token_getNameId_WillReturnAssertionNameId()
-    {
-        $this->givenSAML1Token();
-
-        $returnedNameId = $this->token->getNameId();
-
-        $this->assertEquals($this->assertion_nameId, $returnedNameId);
-    }
-
-    public function test_SAML1Token_getAttributes_WillReturnAssertionAttributes()
-    {
-        $this->givenSAML1Token();
 
         $returnedAttributes = $this->token->getAttributes();
 
@@ -91,7 +71,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_ConstructWithValidTokenTypes_ReturnsTokenInstance()
     {
-        $this->setupAssertion(SAML1_Assertion::class);
+        $this->setupAssertion(SAML2_Assertion::class);
 
         foreach (self::VALID_TOKEN_TYPES as $validTokenType) {
             try {
@@ -106,7 +86,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_ConstructWithValidAssertion_ReturnsTokenInstance()
     {
-        $this->setupAssertion(SAML1_Assertion::class);
+        $this->setupAssertion(SAML2_Assertion::class);
 
         try {
             $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
@@ -129,7 +109,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetValidTokenType_Succeeds()
     {
-        $this->setupAssertion(SAML1_Assertion::class);
+        $this->setupAssertion(SAML2_Assertion::class);
         $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
 
         foreach (self::VALID_TOKEN_TYPES as $validTokenType) {
@@ -145,7 +125,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetInvalidTokenType_ThrowsInvalidArgumentException()
     {
-        $this->setupAssertion(SAML1_Assertion::class);
+        $this->setupAssertion(SAML2_Assertion::class);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid token_type');
@@ -155,7 +135,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetValidAssertion_Succeeds()
     {
-        $this->setupAssertion(SAML1_Assertion::class);
+        $this->setupAssertion(SAML2_Assertion::class);
         $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
 
         try {
@@ -169,7 +149,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetInvalidAssertion_ThrowsInvalidArgumentException()
     {
-        $this->setupAssertion(SAML1_Assertion::class);
+        $this->setupAssertion(SAML2_Assertion::class);
         $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -190,12 +170,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $this->token = new Token('SAML_2_0', $this->assertion);
     }
 
-    private function givenSAML1Token()
-    {
-        $this->setupAssertion(SAML1_Assertion::class);
-        $this->token = new Token('SAML_1_1_ENC', $this->assertion);
-    }
-
     private function setupAssertion($assertion_class_name)
     {
         $this->assertion_nameId = ['Value' => self::AN_IDENTIFIER];
@@ -211,7 +185,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    const VALID_TOKEN_TYPES = ['SAML_1_1', 'SAML_1_1_ENC', 'SAML_2_0', 'SAML_2_0_ENC'];
+    const VALID_TOKEN_TYPES = ['SAML_2_0', 'SAML_2_0_ENC'];
 
     const AN_IDENTIFIER = 'asdf@asdf.com';
     const AN_IDENTIFIER_CLAIM_NAME = 'user-id';

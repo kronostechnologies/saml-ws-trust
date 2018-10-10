@@ -4,9 +4,7 @@ namespace Kronos\SamlWsTrust\WSTrust;
 
 use DOMDocument;
 use DOMXPath;
-use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use SAML2_Assertion;
-use SAML2_Utils;
 use XMLSecurityKey;
 
 class TokenParser
@@ -55,12 +53,6 @@ class TokenParser
         $xpath->registerNamespace('saml1', 'urn:oasis:names:tc:SAML:1.0:assertion');
 
         switch ($this->tokenType) {
-            case 'SAML_1_1':
-                $assertion = $this->parseSAML1Assertion($xpath);
-                break;
-            case 'SAML_1_1_ENC':
-                $assertion = $this->parseEncryptedSAML1Assertion($xpath);
-                break;
             case 'SAML_2_0':
                 $assertion = $this->parseSAML2Assertion($xpath);
                 break;
@@ -80,54 +72,6 @@ class TokenParser
     public function setInputKey(XMLSecurityKey $input_key)
     {
         $this->inputKey = $input_key;
-    }
-
-
-    /**
-     * Get the SAML 1.1 Assertion
-     * @param DOMXPath $xpath
-     * @return SAML1_Assertion
-     * @throws Exception
-     */
-    protected function parseEncryptedSAML1Assertion(DOMXpath $xpath)
-    {
-
-        if (!$this->inputKey) {
-            throw new Exception('Unable to parse encrypted token without input key');
-        }
-
-        $encrypted_data = $xpath
-            ->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/xenc:EncryptedData');
-        if (!$encrypted_data) {
-            throw new Exception('EncryptedData element not found.');
-        }
-
-        if ($encrypted_data->length > 1) {
-            throw new Exception('Only one encrypted element supported.');
-        } elseif ($encrypted_data->length === 0) {
-            throw new Exception('No encrypted element found');
-        }
-
-        $decrypted_xml = SAML2_Utils::decryptElement($encrypted_data->item(0), $this->inputKey, array());
-
-        return new SAML1_Assertion($decrypted_xml);
-    }
-
-    /**
-     * @param DOMXPath $xpath
-     * @return SAML1_Assertion
-     * @throws Exception
-     */
-    protected function parseSAML1Assertion(DOMXpath $xpath)
-    {
-        $assertions = $xpath->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/saml1:Assertion');
-        if ($assertions->length > 1) {
-            throw new Exception('Only one assertion element supported.');
-        } elseif ($assertions->length === 0) {
-            throw new Exception('No assertion found element supported.');
-        }
-
-        return new SAML1_Assertion($assertions->item(0));
     }
 
     /**
