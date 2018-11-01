@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<ruleset>
+    <file>Kronos</file>
+
+    <rule ref="./vendor/kronostechnologies/php-coding-standard/phpcs.xml"/>
+</ruleset>

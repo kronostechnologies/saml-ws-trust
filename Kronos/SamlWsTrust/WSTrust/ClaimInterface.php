@@ -2,16 +2,16 @@
 
 namespace Kronos\SamlWsTrust\WSTrust;
 
+interface ClaimInterface
+{
 
-interface ClaimInterface {
+    /**
+     * @return string
+     */
+    public function getName();
 
-	/**
-	 * @return string
-	 */
-	public function getName();
-
-	/**
-	 * @return mixed[]
-	 */
-	public function getValues();
+    /**
+     * @return mixed[]
+     */
+    public function getValues();
 }

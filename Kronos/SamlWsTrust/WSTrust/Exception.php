@@ -2,6 +2,7 @@
 
 namespace  Kronos\SamlWsTrust\WSTrust;
 
-class Exception extends \Exception {
-	
+class Exception extends \Exception
+{
+    
 }
