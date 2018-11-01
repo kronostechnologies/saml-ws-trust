@@ -2,12 +2,12 @@
 
 namespace Kronos\Tests\SamlWsTrust\WSTrust;
 
-use Kronos\SamlWsTrust\SAML1\SAML1_Assertion;
 use Kronos\SamlWsTrust\WSTrust\Token;
 use Kronos\SamlWsTrust\WSTrust\TokenParser;
-use XMLSecurityKey;
+use Kronos\Tests\SamlWsTrust\TestCase;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 
-class TokenParserTest extends \PHPUnit_Framework_TestCase {
+class TokenParserTest extends TestCase {
 	const MOCKS_PATH = __DIR__ . '/../../../Mocks/';
 
 	const VALID_SAML_20_RTSP_FILE = self::MOCKS_PATH . 'ValidSAML20RTSP.xml';
