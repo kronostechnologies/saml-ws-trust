@@ -6,14 +6,15 @@ use Kronos\SamlWsTrust\WSTrust\ClaimInterface;
 use Kronos\SamlWsTrust\WSTrust\ProviderInterface;
 use Kronos\SamlWsTrust\WSTrust\Token;
 use Kronos\SamlWsTrust\WSTrust\TokenValidator;
+use Kronos\Tests\SamlWsTrust\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
-use SAML2_Assertion;
+use SAML2\Assertion;
 
-class TokenValidatorTest extends \PHPUnit_Framework_TestCase
+class TokenValidatorTest extends TestCase
 {
 
     /**
-     * @var SAML2_Assertion | PHPUnit_Framework_MockObject_MockObject
+     * @var Assertion | PHPUnit_Framework_MockObject_MockObject
      */
     private $assertion;
 
@@ -35,7 +36,7 @@ class TokenValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->assertion = $this->getMockBuilder(SAML2_Assertion::class)->disableOriginalConstructor()->getMock();
+        $this->assertion = $this->getMockBuilder(Assertion::class)->disableOriginalConstructor()->getMock();
 
         $this->provider = $this->getMock(ProviderInterface::class);
         $this->provider->method('getIdpUrl')->willReturn(self::AN_IDP);

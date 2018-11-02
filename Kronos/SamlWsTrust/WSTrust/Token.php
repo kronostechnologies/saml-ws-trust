@@ -79,7 +79,8 @@ class Token
     }
 
     /**
-     * @return array|bool
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @throws \Exception
      */
     public function getNameId()
     {
@@ -105,8 +106,8 @@ class Token
         $attributes = $this->getAttributes();
 
         $identifier = '';
-        if ($nameId) {
-            $identifier = $nameId['Value'];
+        if ($nameId instanceof \SAML2\XML\saml\NameID) {
+            $identifier = $nameId->value;
         }
         if ($claim_name && isset($attributes[$claim_name][0])) {
             $identifier = $attributes[$claim_name][0];

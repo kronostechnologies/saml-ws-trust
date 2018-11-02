@@ -3,8 +3,9 @@
 namespace Kronos\Tests\SamlWsTrust\WSTrust;
 
 use Kronos\SamlWsTrust\WSTrust\TokenValidatorResponse;
+use Kronos\Tests\SamlWsTrust\TestCase;
 
-class TokenValidatorResponseTest extends \PHPUnit_Framework_TestCase
+class TokenValidatorResponseTest extends TestCase
 {
     const EMPTY_ERR_MSG = 'Invalid WSTrust token: ';
 

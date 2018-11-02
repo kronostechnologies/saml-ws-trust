@@ -97,6 +97,7 @@ class TokenValidator
     /**
      * @param Assertion $assertion
      * @param TokenValidatorResponse $response
+     * @throws \Exception
      */
     private function validateSignature($assertion, TokenValidatorResponse $response)
     {
@@ -135,12 +136,13 @@ class TokenValidator
      * Get XMLSecurityKey for X509Certificate base64 data found in xml elements.
      * @param string $x509cert
      * @return XMLSecurityKey
+     * @throws \Exception
      */
     private function getX509CertificatePubKey($x509cert)
     {
         $x509cert = str_replace(array("\r", "\n"), "", $x509cert);
         $x509cert = "-----BEGIN CERTIFICATE-----\n" . chunk_split($x509cert, 64, "\n") . "-----END CERTIFICATE-----\n";
-        $signKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'public'));
+        $signKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'public'));
         $signKey->loadKey($x509cert, false, true);
         return $signKey;
     }

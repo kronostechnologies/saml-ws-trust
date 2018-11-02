@@ -3,10 +3,12 @@
 namespace Kronos\Tests\SamlWsTrust\WSTrust;
 
 use Kronos\SamlWsTrust\WSTrust\Token;
-use SAML2_Assertion;
-use SAML2_EncryptedAssertion;
+use Kronos\Tests\SamlWsTrust\TestCase;
+use SAML2\Assertion;
+use SAML2\EncryptedAssertion;
+use SAML2\XML\saml\NameID;
 
-class TokenTest extends \PHPUnit_Framework_TestCase
+class TokenTest extends TestCase
 {
 
     /**
@@ -55,7 +57,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_ConstructWithInvalidToken_WillThrowInvalidArgumentException()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
         $this->expectException(\InvalidArgumentException::class);
 
         $token = new Token(self::AN_INVALID_TOKEN_TYPE, $this->assertion);
@@ -71,7 +73,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_ConstructWithValidTokenTypes_ReturnsTokenInstance()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
 
         foreach (self::VALID_TOKEN_TYPES as $validTokenType) {
             try {
@@ -86,7 +88,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_ConstructWithValidAssertion_ReturnsTokenInstance()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
 
         try {
             $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
@@ -109,7 +111,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetValidTokenType_Succeeds()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
         $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
 
         foreach (self::VALID_TOKEN_TYPES as $validTokenType) {
@@ -125,7 +127,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetInvalidTokenType_ThrowsInvalidArgumentException()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid token_type');
@@ -135,7 +137,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetValidAssertion_Succeeds()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
         $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
 
         try {
@@ -149,7 +151,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     public function test_Token_SetInvalidAssertion_ThrowsInvalidArgumentException()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
         $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -161,18 +163,20 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
     private function givenInvalidAssertionType()
     {
-        $this->assertion = $this->getMockBuilder(SAML2_EncryptedAssertion::class)->disableOriginalConstructor()->getMock();
+        $this->assertion = $this->getMockBuilder(EncryptedAssertion::class)->disableOriginalConstructor()->getMock();
     }
 
     private function givenSAML2Token()
     {
-        $this->setupAssertion(SAML2_Assertion::class);
+        $this->setupAssertion(Assertion::class);
         $this->token = new Token('SAML_2_0', $this->assertion);
     }
 
     private function setupAssertion($assertion_class_name)
     {
-        $this->assertion_nameId = ['Value' => self::AN_IDENTIFIER];
+        $nameId = new NameID();
+        $nameId->value = self::AN_IDENTIFIER;
+        $this->assertion_nameId = $nameId;
         $this->assertion_attributes = [
             self::AN_IDENTIFIER_CLAIM_NAME => [
                 self::AN_IDENTIFIER_CLAIM_VALUE
