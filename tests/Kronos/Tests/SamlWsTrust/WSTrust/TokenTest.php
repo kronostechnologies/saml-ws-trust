@@ -18,6 +18,7 @@ class TokenTest extends TestCase
     private $assertion;
     private $assertion_nameId;
     private $assertion_attributes;
+    private $deflateEncodedAssertion;
 
     public function test_Saml20Token_getNameId_WillReturnAssertionNameId()
     {
@@ -60,15 +61,7 @@ class TokenTest extends TestCase
         $this->setupAssertion(Assertion::class);
         $this->expectException(\InvalidArgumentException::class);
 
-        $token = new Token(self::AN_INVALID_TOKEN_TYPE, $this->assertion);
-    }
-
-    public function test_Token_ConstructWithInvalidAssertionType_WillThrowInvalidArgumentException()
-    {
-        $this->givenInvalidAssertionType();
-        $this->expectException(\InvalidArgumentException::class);
-
-        $token = new Token(self::AN_INVALID_TOKEN_TYPE, $this->assertion);
+        $token = new Token(self::AN_INVALID_TOKEN_TYPE, $this->assertion, $this->deflateEncodedAssertion);
     }
 
     public function test_Token_ConstructWithValidTokenTypes_ReturnsTokenInstance()
@@ -77,7 +70,7 @@ class TokenTest extends TestCase
 
         foreach (self::VALID_TOKEN_TYPES as $validTokenType) {
             try {
-                $token = new Token($validTokenType, $this->assertion);
+                $token = new Token($validTokenType, $this->assertion, $this->deflateEncodedAssertion);
 
                 $this->assertInstanceOf(Token::class, $token);
             } catch (\Exception $e) {
@@ -91,7 +84,7 @@ class TokenTest extends TestCase
         $this->setupAssertion(Assertion::class);
 
         try {
-            $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
+            $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion, $this->deflateEncodedAssertion);
 
             $this->assertInstanceOf(Token::class, $token);
         } catch (\Exception $e) {
@@ -99,20 +92,10 @@ class TokenTest extends TestCase
         }
     }
 
-    public function test_Token_ConstructWithInvalidAssertion_ThrowsException()
-    {
-        $this->assertion = new \stdClass();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid $assertion');
-
-        new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
-    }
-
     public function test_Token_SetValidTokenType_Succeeds()
     {
         $this->setupAssertion(Assertion::class);
-        $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
+        $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion, $this->deflateEncodedAssertion);
 
         foreach (self::VALID_TOKEN_TYPES as $validTokenType) {
             try {
@@ -132,13 +115,13 @@ class TokenTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid token_type');
 
-        new Token(self::AN_INVALID_TOKEN_TYPE, $this->assertion);
+        new Token(self::AN_INVALID_TOKEN_TYPE, $this->assertion, $this->deflateEncodedAssertion);
     }
 
     public function test_Token_SetValidAssertion_Succeeds()
     {
         $this->setupAssertion(Assertion::class);
-        $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
+        $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion, $this->deflateEncodedAssertion);
 
         try {
             $token->setAssertion($this->assertion);
@@ -152,7 +135,7 @@ class TokenTest extends TestCase
     public function test_Token_SetInvalidAssertion_ThrowsInvalidArgumentException()
     {
         $this->setupAssertion(Assertion::class);
-        $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion);
+        $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion, $this->deflateEncodedAssertion);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid $assertion');
@@ -160,16 +143,10 @@ class TokenTest extends TestCase
         $token->setAssertion(new \stdClass());
     }
 
-
-    private function givenInvalidAssertionType()
-    {
-        $this->assertion = $this->getMockBuilder(EncryptedAssertion::class)->disableOriginalConstructor()->getMock();
-    }
-
     private function givenSAML2Token()
     {
         $this->setupAssertion(Assertion::class);
-        $this->token = new Token('SAML_2_0', $this->assertion);
+        $this->token = new Token('SAML_2_0', $this->assertion, $this->deflateEncodedAssertion);
     }
 
     private function setupAssertion($assertion_class_name)
@@ -186,6 +163,7 @@ class TokenTest extends TestCase
         $this->assertion = $this->getMockBuilder($assertion_class_name)->disableOriginalConstructor()->getMock();
         $this->assertion->method('getNameId')->willReturn($this->assertion_nameId);
         $this->assertion->method('getAttributes')->willReturn($this->assertion_attributes);
+        $this->deflateEncodedAssertion = 'DEFLATED';
 
     }
 

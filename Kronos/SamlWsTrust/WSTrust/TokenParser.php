@@ -5,6 +5,7 @@ namespace Kronos\SamlWsTrust\WSTrust;
 use DOMDocument;
 use DOMXPath;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Utils;
 use SAML2\Assertion;
 
 class TokenParser
@@ -54,16 +55,12 @@ class TokenParser
 
         switch ($this->tokenType) {
             case 'SAML_2_0':
-                $assertion = $this->parseSAML2Assertion($xpath);
-                break;
+                return $this->parseSAML2Assertion($xpath);
             case 'SAML_2_0_ENC':
-                $assertion = $this->parseEncryptedSAML2Assertion($xpath);
-                break;
+                return $this->parseEncryptedSAML2Assertion($xpath);
             default:
                 throw new  \DomainException('Invalid token type: ' . $this->tokenType);
         }
-
-        return new Token($this->tokenType, $assertion);
     }
 
     /**
@@ -76,51 +73,88 @@ class TokenParser
 
     /**
      * @param DOMXPath $xpath
-     * @return Assertion
+     * @return Token
      * @throws Exception
      */
     protected function parseSAML2Assertion(DOMXpath $xpath)
     {
-        $assertions = $xpath->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/saml:Assertion');
-        if ($assertions->length > 1) {
-            throw new Exception('Only one assertion element supported.');
-        } elseif ($assertions->length === 0) {
-            throw new Exception('No assertion found element supported.');
-        }
-
-        return new Assertion($assertions->item(0));
-    }
-
-    /**
-     * @param DOMXPath $xpath
-     * @return Assertion
-     * @throws Exception
-     */
-    protected function parseEncryptedSAML2Assertion(DOMXpath $xpath)
-    {
-
-        if (!$this->inputKey) {
-            throw new Exception('Unable to parse encrypted token without input key');
-        }
-
-        $assertions = $xpath
-            ->query('/trust:RequestSecurityTokenResponseCollection/trust:RequestSecurityTokenResponse/' .
-                'trust:RequestedSecurityToken/saml:EncryptedAssertion');
-
-        if ($assertions->length > 1) {
-            throw new Exception('Only one assertion element supported.');
-        } elseif ($assertions->length === 0) {
-            //Fallback on older WS-Trust
-            $assertions = $xpath
-                ->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/saml:EncryptedAssertion');
+        try {
+            $assertions = $xpath->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/saml:Assertion');
             if ($assertions->length > 1) {
                 throw new Exception('Only one assertion element supported.');
             } elseif ($assertions->length === 0) {
                 throw new Exception('No assertion found element supported.');
             }
-        }
 
-        $encrypted_assertion = new \SAML2_EncryptedAssertion($assertions->item(0));
-        return $encrypted_assertion->getAssertion($this->inputKey);
+            $assertionElement = $assertions->item(0);
+            $deflateEncodedAssertion = $this->deflateEncodeInitialAssertion($assertionElement);
+            $assertion = new Assertion($assertionElement);
+            return new Token($this->tokenType, $assertion, $deflateEncodedAssertion);
+        }
+        catch(\Exception $ex){
+            throw new Exception($ex->getMessage(), 0, $ex);
+        }
+    }
+
+    /**
+     * @param DOMXPath $xpath
+     * @return Token
+     * @throws Exception
+     */
+    protected function parseEncryptedSAML2Assertion(DOMXpath $xpath)
+    {
+        try {
+            if (!$this->inputKey) {
+                throw new Exception('Unable to parse encrypted token without input key');
+            }
+
+            $assertions = $xpath
+                ->query('/trust:RequestSecurityTokenResponseCollection/trust:RequestSecurityTokenResponse/' .
+                    'trust:RequestedSecurityToken/saml:EncryptedAssertion');
+
+            if ($assertions->length > 1) {
+                throw new Exception('Only one assertion element supported.');
+            } elseif ($assertions->length === 0) {
+                //Fallback on older WS-Trust
+                $assertions = $xpath
+                    ->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/saml:EncryptedAssertion');
+                if ($assertions->length > 1) {
+                    throw new Exception('Only one assertion element supported.');
+                } elseif ($assertions->length === 0) {
+                    throw new Exception('No assertion found element supported.');
+                }
+            }
+
+            $encryptedAssertionElement = $this->getEncryptedDataElement($assertions->item(0));
+            $decryptedAssertionElement = Utils::decryptElement($encryptedAssertionElement, $this->inputKey);
+            $deflateEncodedAssertion = $this->deflateEncodeInitialAssertion($decryptedAssertionElement);
+
+            $assertion = new Assertion($decryptedAssertionElement);
+            return new Token($this->tokenType, $assertion, $deflateEncodedAssertion);
+        }
+        catch(\Exception $ex){
+            throw new Exception($ex->getMessage(), 0, $ex);
+        }
+    }
+
+    /**
+     * @param \DOMElement $xml
+     * @return \DOMElement
+     * @throws Exception
+     */
+    protected function getEncryptedDataElement(\DOMElement $xml){
+        $data = Utils::xpQuery($xml, './xenc:EncryptedData');
+        if (count($data) === 0) {
+            throw new Exception('Missing encrypted data in <saml:EncryptedAssertion>.');
+        } elseif (count($data) > 1) {
+            throw new Exception('More than one encrypted data element in <saml:EncryptedAssertion>.');
+        }
+        return $data[0];
+    }
+
+    protected function deflateEncodeInitialAssertion(\DOMElement $xml)
+    {
+        $xmlString = $xml->ownerDocument->saveXML($xml);
+        return base64_encode(gzdeflate($xmlString));
     }
 }

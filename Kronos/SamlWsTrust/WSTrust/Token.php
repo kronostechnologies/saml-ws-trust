@@ -18,23 +18,26 @@ class Token
     private $assertion;
 
     /**
+     * @var string Initial decryted token data compressed with gzdeflate and encoded in base64
+     */
+    private $deflateEncodedAssertion;
+
+    /**
      * Token constructor.
      * @param string $token_type
      * @param Assertion $assertion
+     * @param string $deflateEncodedAssertion Initial decryted token data compressed with gzdeflate and encoded in base64
      */
-    public function __construct($token_type, $assertion)
+    public function __construct($token_type, Assertion $assertion, $deflateEncodedAssertion)
     {
 
         if (!self::isTokenType($token_type)) {
             throw new \InvalidArgumentException('Invalid token_type');
         }
 
-        if (!self::isAssertion($assertion)) {
-            throw new \InvalidArgumentException('Invalid $assertion');
-        }
-
         $this->tokenType = $token_type;
         $this->assertion = $assertion;
+        $this->deflateEncodedAssertion = $deflateEncodedAssertion;
     }
 
     /**
@@ -132,5 +135,13 @@ class Token
     public static function isTokenType($token_type)
     {
         return in_array($token_type, ['SAML_2_0', 'SAML_2_0_ENC']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeflateEncodedAssertion()
+    {
+        return $this->deflateEncodedAssertion;
     }
 }
