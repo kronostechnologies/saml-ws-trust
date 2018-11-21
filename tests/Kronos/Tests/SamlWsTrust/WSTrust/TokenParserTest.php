@@ -7,12 +7,13 @@ use Kronos\SamlWsTrust\WSTrust\TokenParser;
 use Kronos\Tests\SamlWsTrust\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
-class TokenParserTest extends TestCase {
-	const MOCKS_PATH = __DIR__ . '/../../../Mocks/';
+class TokenParserTest extends TestCase
+{
+    const MOCKS_PATH = __DIR__ . '/../../../Mocks/';
 
-	const VALID_SAML_20_RTSP_FILE = self::MOCKS_PATH . 'ValidSAML20RTSP.xml';
-	const VALID_SAML_20_CRYPT_RTSP_FILE = self::MOCKS_PATH . 'ValidSAML20CryptRTSP.xml';
-	const VALID_SAML_20_CRYPT_RTSP_DECRYPTED_ASSERTION_FILE = self::MOCKS_PATH . 'ValidSAML20CryptRTSPDecryptedAssertion.xml';
+    const VALID_SAML_20_RTSP_FILE = self::MOCKS_PATH . 'ValidSAML20RTSP.xml';
+    const VALID_SAML_20_CRYPT_RTSP_FILE = self::MOCKS_PATH . 'ValidSAML20CryptRTSP.xml';
+    const VALID_SAML_20_CRYPT_RTSP_DECRYPTED_ASSERTION_FILE = self::MOCKS_PATH . 'ValidSAML20CryptRTSPDecryptedAssertion.xml';
     const SAML_20_MANY_ASSERT_FILE = self::MOCKS_PATH . 'SAML20ManyAssertions.xml';
     const SAML_20_NO_ASSERT_FILE = self::MOCKS_PATH . 'SAML20NoAssertion.xml';
     const SAML_20_ENC_MANY_ASSERT_FILE = self::MOCKS_PATH . 'SAML20EncManyAssertions.xml';
@@ -84,20 +85,22 @@ class TokenParserTest extends TestCase {
         return file_get_contents(self::SAML_20_ENC_NO_ASSERT_FILE);
     }
 
-    private function getInputKey(){
+    private function getInputKey()
+    {
         $inputKey = new XMLSecurityKey(XMLSecurityKey::RSA_OAEP_MGF1P, array('type' => 'private'));
         $inputKey->passphrase = self::INPUT_KEY_PASSPHRASE;
         $inputKey->loadKey(self::INPUT_KEY_FILE, true);
         return $inputKey;
     }
 
-    public function test_TokenParserWithInvalidType_Construct_WillThrowInvalidArgumentException() {
-		$this->setExpectedException('\InvalidArgumentException');
+    public function test_TokenParserWithInvalidType_Construct_WillThrowInvalidArgumentException()
+    {
+        $this->setExpectedException('\InvalidArgumentException');
 
-		new TokenParser(self::INVALID_TOKEN_TYPE);
-	}
+        new TokenParser(self::INVALID_TOKEN_TYPE);
+    }
 
-	public function test_TokenParserWithValidType_Construct_WillInstanciateSuccessfully()
+    public function test_TokenParserWithValidType_Construct_WillInstanciateSuccessfully()
     {
         foreach (self::VALID_TOKEN_TYPES as $validTokenType) {
             try {
@@ -162,8 +165,7 @@ class TokenParserTest extends TestCase {
         $parser = new TokenParser('SAML_2_0');
 
         $retVal = $parser->parseToken($this->getValidSAML20RTSP());
-
-//        $plain = gzinflate(base64_decode($retVal->getDeflateEncodedAssertion()));
+        
         $this->assertEquals(self::DEFLATE_ENCODED_SAML2_ASSERTION, $retVal->getDeflateEncodedAssertion());
     }
 
