@@ -160,7 +160,7 @@ class TokenTest extends TestCase
             ]
         ];
 
-        $this->assertion = $this->getMockBuilder($assertion_class_name)->disableOriginalConstructor()->getMock();
+        $this->assertion = $this->createMock($assertion_class_name);
         $this->assertion->method('getNameId')->willReturn($this->assertion_nameId);
         $this->assertion->method('getAttributes')->willReturn($this->assertion_attributes);
         $this->deflateEncodedAssertion = 'DEFLATED';

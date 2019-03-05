@@ -95,7 +95,7 @@ class TokenParserTest extends TestCase
 
     public function test_TokenParserWithInvalidType_Construct_WillThrowInvalidArgumentException()
     {
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
 
         new TokenParser(self::INVALID_TOKEN_TYPE);
     }
@@ -146,7 +146,7 @@ class TokenParserTest extends TestCase
     {
         $parser = new TokenParser('SAML_2_0');
 
-        $this->expectException(\PHPUnit_Framework_Error_Warning::class);
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
 
         $parser->parseToken("non xml doc");
     }
@@ -165,7 +165,7 @@ class TokenParserTest extends TestCase
         $parser = new TokenParser('SAML_2_0');
 
         $retVal = $parser->parseToken($this->getValidSAML20RTSP());
-        
+
         $this->assertEquals(self::DEFLATE_ENCODED_SAML2_ASSERTION, $retVal->getDeflateEncodedAssertion());
     }
 

@@ -7,14 +7,14 @@ use Kronos\SamlWsTrust\WSTrust\ProviderInterface;
 use Kronos\SamlWsTrust\WSTrust\Token;
 use Kronos\SamlWsTrust\WSTrust\TokenValidator;
 use Kronos\Tests\SamlWsTrust\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use SAML2\Assertion;
 
 class TokenValidatorTest extends TestCase
 {
 
     /**
-     * @var Assertion | PHPUnit_Framework_MockObject_MockObject
+     * @var Assertion | MockObject
      */
     private $assertion;
 
@@ -24,7 +24,7 @@ class TokenValidatorTest extends TestCase
     private $provider;
 
     /**
-     * @var Token | PHPUnit_Framework_MockObject_MockObject
+     * @var Token | MockObject
      */
     private $token;
 
@@ -34,11 +34,11 @@ class TokenValidatorTest extends TestCase
     private $validator;
 
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->assertion = $this->getMockBuilder(Assertion::class)->disableOriginalConstructor()->getMock();
+        $this->assertion = $this->createMock(Assertion::class);
 
-        $this->provider = $this->getMock(ProviderInterface::class);
+        $this->provider = $this->createMock(ProviderInterface::class);
         $this->provider->method('getIdpUrl')->willReturn(self::AN_IDP);
         $this->provider->method('getRpRealm')->willReturn(self::A_REALM);
         $this->provider->method('getTrustedIssuers')->willReturn([self::AN_ISSUER]);
@@ -286,13 +286,13 @@ class TokenValidatorTest extends TestCase
             $this->assertion->method('getNotOnOrAfter')->willReturn($overrides['notOnOrAfter']);
         }
 
-        $this->token = $this->getMockBuilder(Token::class)->disableOriginalConstructor()->getMock();
+        $this->token = $this->createMock(Token::class);
         $this->token->method('getAssertion')->willReturn($this->assertion);
     }
 
     private function givenMandatoryClaim()
     {
-        $claim = $this->getMock(ClaimInterface::class);
+        $claim = $this->createMock(ClaimInterface::class);
         $claim->method('getName')->willReturn(self::A_CLAIM_NAME);
         $claim->method('getValues')->willReturn([self::A_CLAIM_VALUE]);
         $this->provider->method('getMandatoryClaims')->willReturn([$claim]);
