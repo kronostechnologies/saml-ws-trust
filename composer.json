@@ -24,7 +24,7 @@
     "kronostechnologies/php-coding-standard": "^1.0.2",
     "ext-openssl": "*",
     "simplesamlphp/saml2": "^3.3.8",
-    "robrichards/xmlseclibs": "^3.0.3",
+    "robrichards/xmlseclibs": "^3.0.4",
     "ext-zlib": "*"
   },
   "require-dev": {
