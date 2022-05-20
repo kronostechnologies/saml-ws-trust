@@ -14,25 +14,21 @@ class TokenValidatorTest extends TestCase
 {
 
     /**
-     * @var Assertion | MockObject
+     * @var Assertion & MockObject
      */
     private $assertion;
 
     /**
-     * @var ProviderInterface
+     * @var ProviderInterface & MockObject
      */
     private $provider;
 
     /**
-     * @var Token | MockObject
+     * @var Token & MockObject
      */
     private $token;
 
-    /**
-     * @var TokenValidator
-     */
-    private $validator;
-
+    private TokenValidator $validator;
 
     public function setUp(): void
     {

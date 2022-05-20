@@ -110,10 +110,10 @@ class Token
 
         $identifier = '';
         if ($nameId instanceof \SAML2\XML\saml\NameID) {
-            $identifier = $nameId->value;
+            $identifier = (string)$nameId->value;
         }
         if ($claim_name && isset($attributes[$claim_name][0])) {
-            $identifier = $attributes[$claim_name][0];
+            $identifier = $attributes[$claim_name][0] ?? '';
         }
 
         return $identifier;

@@ -26,6 +26,8 @@ class Random
      */
     public static function generateID()
     {
-        return '_'.bin2hex(openssl_random_pseudo_bytes((int)((self::ID_LENGTH - 1)/2)));
+        /** @psalm-suppress RedundantCast */
+        $length = (int)((self::ID_LENGTH - 1)/2);
+        return '_'.bin2hex(openssl_random_pseudo_bytes($length));
     }
 }

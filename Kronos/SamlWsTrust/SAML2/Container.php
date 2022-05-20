@@ -2,15 +2,13 @@
 
 namespace Kronos\SamlWsTrust\SAML2;
 
+use DOMNode;
+use Psr\Log\LoggerInterface;
 use SAML2\Compat\AbstractContainer;
 
 class Container extends AbstractContainer
 {
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var string
@@ -32,21 +30,13 @@ class Container extends AbstractContainer
      */
     private $postRedirectData;
 
-    /**
-     * Container constructor.
-     * @param \Psr\Log\LoggerInterface $logger
-     */
-    public function __construct(\Psr\Log\LoggerInterface $logger=null)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-
-    /**
-     * Get a PSR-3 compatible logger.
-     * @return \Psr\Log\LoggerInterface
-     */
-    public function getLogger(){
+    public function getLogger(): LoggerInterface
+    {
         return $this->logger;
     }
 
@@ -66,14 +56,15 @@ class Container extends AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param string $message
+     * @param string|DOMNode $message
      * @param string $type
      * @return void
      */
     public function debugMessage($message, $type){
-        if($this->logger){
-            $this->logger->debug($message, ['type' => $type]);
+        if($message instanceof DOMNode) {
+            $message = "DOMNode: " . $message->textContent;
         }
+        $this->logger->debug($message, ['type' => $type]);
     }
 
     /**

@@ -28,6 +28,12 @@
     "ext-zlib": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^8.0"
+    "phpunit/phpunit": "9.5.20",
+    "vimeo/psalm": "4.23.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true
+    }
   }
 }

@@ -140,6 +140,7 @@ class TokenTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid $assertion');
 
+        /** @psalm-suppress InvalidArgument */
         $token->setAssertion(new \stdClass());
     }
 
