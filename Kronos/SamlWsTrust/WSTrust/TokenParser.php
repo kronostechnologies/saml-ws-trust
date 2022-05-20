@@ -153,8 +153,11 @@ class TokenParser
 
     protected function deflateEncodeInitialAssertion(DOMElement $xml): string
     {
-        /** @psalm-suppress PossiblyNullReference */
-        $xmlString = $xml->ownerDocument->saveXML($xml);
+        $document = $xml->ownerDocument;
+        if (!$document instanceof DOMDocument) {
+            throw new \RuntimeException("Could not find assertion dom document");
+        }
+        $xmlString = $document->saveXML($xml);
         return base64_encode(gzdeflate($xmlString));
     }
 }

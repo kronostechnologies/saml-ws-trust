@@ -14,6 +14,15 @@ jobs:
     with:
       checks: phpunit,psalm
       php-version: '7.4'
-      extensions: gearman, pcov
+      extensions: pcov
+    secrets:
+      GPR_KEY: ${{ secrets.GPR_KEY }}
+
+  php-library-8-1:
+    uses: equisoft-actions/php-workflows/.github/workflows/php-library.yml@v2
+    with:
+      checks: phpunit,psalm,qodana
+      php-version: '8.1'
+      extensions: pcov
     secrets:
       GPR_KEY: ${{ secrets.GPR_KEY }}
