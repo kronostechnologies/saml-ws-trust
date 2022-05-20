@@ -6,6 +6,7 @@ use Kronos\SamlWsTrust\WSTrust\Token;
 use Kronos\SamlWsTrust\WSTrust\TokenParser;
 use Kronos\Tests\SamlWsTrust\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Assertion;
 
 class TokenParserTest extends TestCase
 {
@@ -157,7 +158,7 @@ class TokenParserTest extends TestCase
 
         $retVal = $parser->parseToken($this->getValidSAML20RTSP());
 
-        $this->assertInstanceOf(\SAML2_Assertion::class, $retVal->getAssertion());
+        $this->assertInstanceOf(Assertion::class, $retVal->getAssertion());
     }
 
     public function test_ValidSAML20RSTP_parseToken_TokenInstanceContainsDeflateEncodedAssertion()
@@ -218,7 +219,7 @@ class TokenParserTest extends TestCase
 
         $retVal = $parser->parseToken($this->getValidSAML20CryptRTSP());
 
-        $this->assertInstanceOf(\SAML2_Assertion::class, $retVal->getAssertion());
+        $this->assertInstanceOf(Assertion::class, $retVal->getAssertion());
     }
 
     public function test_ValidSAML20CryptRSTP_parseToken_TokenInstanceContainsDeflateEncodedAssertion()

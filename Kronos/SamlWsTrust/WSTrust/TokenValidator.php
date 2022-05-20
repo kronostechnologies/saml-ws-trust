@@ -44,7 +44,7 @@ class TokenValidator
         $response = new TokenValidatorResponse();
 
         $issuer = $assertion->getIssuer();
-        if (!in_array($issuer, $this->provider->getTrustedIssuers())) {
+        if (!in_array($issuer->getValue(), $this->provider->getTrustedIssuers())) {
             $response->addValidationError('Unexpected issuer: ' . $issuer);
         }
 

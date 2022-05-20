@@ -12,11 +12,7 @@ use SAML2\Assertion;
 class TokenParser
 {
     private string $tokenType;
-
-    /**
-     * @var ?XMLSecurityKey
-     */
-    private $inputKey;
+    private ?XMLSecurityKey $inputKey = null;
 
     public function __construct(string $token_type)
     {
@@ -29,10 +25,9 @@ class TokenParser
 
     /**
      * @param non-empty-string $token_xml
-     * @return Token
      * @throws Exception
      */
-    public function parseToken(string $token_xml)
+    public function parseToken(string $token_xml): Token
     {
         $dom = new DOMDocument();
         $token_xml = str_replace(array('\"', "\r"), array('"', ""), $token_xml);
@@ -58,9 +53,6 @@ class TokenParser
         }
     }
 
-    /**
-     * @param XMLSecurityKey $input_key
-     */
     public function setInputKey(XMLSecurityKey $input_key)
     {
         $this->inputKey = $input_key;
@@ -68,10 +60,9 @@ class TokenParser
 
     /**
      * @param DOMXPath $xpath
-     * @return Token
      * @throws Exception
      */
-    protected function parseSAML2Assertion(DOMXpath $xpath)
+    protected function parseSAML2Assertion(DOMXpath $xpath): Token
     {
         try {
             $assertions = $xpath->query('/wst:RequestSecurityTokenResponse/wst:RequestedSecurityToken/saml:Assertion');
@@ -95,10 +86,9 @@ class TokenParser
 
     /**
      * @param DOMXPath $xpath
-     * @return Token
      * @throws Exception
      */
-    protected function parseEncryptedSAML2Assertion(DOMXpath $xpath)
+    protected function parseEncryptedSAML2Assertion(DOMXpath $xpath): Token
     {
         try {
             if (!$this->inputKey) {
@@ -154,10 +144,14 @@ class TokenParser
         if (count($data) > 1) {
             throw new Exception('More than one encrypted data element in <saml:EncryptedAssertion>.');
         }
-        return $data[0];
+        $element = $data[0];
+        if (!$element instanceof DOMElement) {
+            throw new \RuntimeException("Expected DOMElement in EncryptedData");
+        }
+        return $element;
     }
 
-    protected function deflateEncodeInitialAssertion(DOMElement $xml)
+    protected function deflateEncodeInitialAssertion(DOMElement $xml): string
     {
         /** @psalm-suppress PossiblyNullReference */
         $xmlString = $xml->ownerDocument->saveXML($xml);
