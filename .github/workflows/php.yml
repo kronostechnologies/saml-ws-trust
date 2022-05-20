@@ -1,0 +1,19 @@
+name: PHP
+
+on:
+  pull_request: {}
+  push:
+    branches:
+      - master
+    tags:
+      - v*.*.*
+
+jobs:
+  php-library:
+    uses: equisoft-actions/php-workflows/.github/workflows/php-library.yml@v2
+    with:
+      checks: phpunit,psalm
+      php-version: '7.4'
+      extensions: gearman, pcov
+    secrets:
+      GPR_KEY: ${{ secrets.GPR_KEY }}
