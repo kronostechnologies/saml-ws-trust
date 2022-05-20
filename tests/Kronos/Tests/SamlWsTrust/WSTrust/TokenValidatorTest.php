@@ -9,30 +9,28 @@ use Kronos\SamlWsTrust\WSTrust\TokenValidator;
 use Kronos\Tests\SamlWsTrust\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use SAML2\Assertion;
+use SAML2\XML\saml\Issuer;
+use SAML2\XML\saml\NameID;
 
 class TokenValidatorTest extends TestCase
 {
 
     /**
-     * @var Assertion | MockObject
+     * @var Assertion & MockObject
      */
     private $assertion;
 
     /**
-     * @var ProviderInterface
+     * @var ProviderInterface & MockObject
      */
     private $provider;
 
     /**
-     * @var Token | MockObject
+     * @var Token & MockObject
      */
     private $token;
 
-    /**
-     * @var TokenValidator
-     */
-    private $validator;
-
+    private TokenValidator $validator;
 
     public function setUp(): void
     {
@@ -247,8 +245,8 @@ class TokenValidatorTest extends TestCase
 
     private function setupToken(array $overrides = [])
     {
-
-        $issuer = isset($overrides['issuer']) ? $overrides['issuer'] : self::AN_ISSUER;
+        $issuer = new Issuer();
+        $issuer->setValue(isset($overrides['issuer']) ? $overrides['issuer'] : self::AN_ISSUER);
         $audience = isset($overrides['audience']) ? $overrides['audience'] : self::A_REALM;
 
         $assertion_attributes = [
@@ -267,8 +265,8 @@ class TokenValidatorTest extends TestCase
             $certificates = [self::A_X509_CERTIFICATE];
         }
 
-
-        $assertion_nameId = ['Value' => self::AN_IDENTIFIER];
+        $assertion_nameId = new NameID();
+        $assertion_nameId->setValue(self::AN_IDENTIFIER);
         $this->assertion->method('getNameId')->willReturn($assertion_nameId);
         $this->assertion->method('getAttributes')->willReturn($assertion_attributes);
         $this->assertion->method('getIssuer')->willReturn($issuer);

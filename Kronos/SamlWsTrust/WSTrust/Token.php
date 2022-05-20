@@ -3,24 +3,18 @@
 namespace Kronos\SamlWsTrust\WSTrust;
 
 use SAML2\Assertion;
+use SAML2\XML\saml\NameID;
 
 class Token
 {
+    private string $tokenType;
 
-    /**
-     * @var string
-     */
-    private $tokenType = '';
-
-    /**
-     * @var Assertion
-     */
-    private $assertion;
+    private Assertion $assertion;
 
     /**
      * @var string Initial decryted token data compressed with gzdeflate and encoded in base64
      */
-    private $deflateEncodedAssertion;
+    private string $deflateEncodedAssertion;
 
     /**
      * Token constructor.
@@ -28,9 +22,8 @@ class Token
      * @param Assertion $assertion
      * @param string $deflateEncodedAssertion Initial decryted token data compressed with gzdeflate and encoded in base64
      */
-    public function __construct($token_type, Assertion $assertion, $deflateEncodedAssertion)
+    public function __construct(string $token_type, Assertion $assertion, string $deflateEncodedAssertion)
     {
-
         if (!self::isTokenType($token_type)) {
             throw new \InvalidArgumentException('Invalid token_type');
         }
@@ -40,10 +33,7 @@ class Token
         $this->deflateEncodedAssertion = $deflateEncodedAssertion;
     }
 
-    /**
-     * @return string
-     */
-    public function getTokenType()
+    public function getTokenType(): string
     {
         return $this->tokenType;
     }
@@ -51,7 +41,7 @@ class Token
     /**
      * @param string $token_type
      */
-    public function setTokenType($token_type)
+    public function setTokenType(string $token_type)
     {
         if (!self::isTokenType($token_type)) {
             throw new \InvalidArgumentException('Invalid token_type');
@@ -60,10 +50,7 @@ class Token
         $this->tokenType = $token_type;
     }
 
-    /**
-     * @return Assertion
-     */
-    public function getAssertion()
+    public function getAssertion(): Assertion
     {
         return $this->assertion;
     }
@@ -71,21 +58,16 @@ class Token
     /**
      * @param Assertion $assertion
      */
-    public function setAssertion($assertion)
+    public function setAssertion(Assertion $assertion)
     {
-
-        if (!self::isAssertion($assertion)) {
-            throw new \InvalidArgumentException('Invalid $assertion');
-        }
-
         $this->assertion = $assertion;
     }
 
     /**
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return NameID|null The name identifier of the assertion.
      * @throws \Exception
      */
-    public function getNameId()
+    public function getNameId(): ?NameID
     {
         return $this->getAssertion()->getNameId();
     }
@@ -93,54 +75,42 @@ class Token
     /**
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->getAssertion()->getAttributes();
     }
 
     /**
      * Get the user identifier in claim $claim_name and fallback on NameId value
-     * @param bool|string $claim_name
-     * @return string
+     * @param ?string $claim_name
+     * @return ?string
      */
-    public function getIdentifier($claim_name = false)
+    public function getIdentifier(string $claim_name = null): ?string
     {
         $nameId = $this->getNameId();
         $attributes = $this->getAttributes();
 
-        $identifier = '';
-        if ($nameId instanceof \SAML2\XML\saml\NameID) {
-            $identifier = $nameId->value;
+        $identifier = null;
+        if ($nameId instanceof NameID) {
+            $identifier = $nameId->getValue();
         }
         if ($claim_name && isset($attributes[$claim_name][0])) {
-            $identifier = $attributes[$claim_name][0];
+            /** @var ?string $identifier */
+            $identifier = $attributes[$claim_name][0] ?? null;
         }
 
         return $identifier;
     }
 
     /**
-     * @param $assertion
-     * @return bool
+     * @param string $token_type
      */
-    public static function isAssertion($assertion)
-    {
-        return ($assertion instanceof Assertion);
-    }
-
-    /**
-     * @param $token_type
-     * @return bool
-     */
-    public static function isTokenType($token_type)
+    public static function isTokenType($token_type): bool
     {
         return in_array($token_type, ['SAML_2_0', 'SAML_2_0_ENC']);
     }
 
-    /**
-     * @return string
-     */
-    public function getDeflateEncodedAssertion()
+    public function getDeflateEncodedAssertion(): string
     {
         return $this->deflateEncodedAssertion;
     }

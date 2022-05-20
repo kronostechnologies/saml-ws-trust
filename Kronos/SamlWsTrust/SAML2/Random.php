@@ -24,8 +24,10 @@ class Random
      * @author Olav Morken, UNINETT AS <olav.morken@uninett.no>
      * @author Jaime Perez, UNINETT AS <jaime.perez@uninett.no>
      */
-    public static function generateID()
+    public static function generateID(): string
     {
-        return '_'.bin2hex(openssl_random_pseudo_bytes((int)((self::ID_LENGTH - 1)/2)));
+        /** @psalm-suppress RedundantCast */
+        $length = (int)((self::ID_LENGTH - 1)/2);
+        return '_'.bin2hex(openssl_random_pseudo_bytes($length));
     }
 }

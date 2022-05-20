@@ -132,17 +132,6 @@ class TokenTest extends TestCase
         }
     }
 
-    public function test_Token_SetInvalidAssertion_ThrowsInvalidArgumentException()
-    {
-        $this->setupAssertion(Assertion::class);
-        $token = new Token(self::VALID_TOKEN_TYPES[0], $this->assertion, $this->deflateEncodedAssertion);
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid $assertion');
-
-        $token->setAssertion(new \stdClass());
-    }
-
     private function givenSAML2Token()
     {
         $this->setupAssertion(Assertion::class);
@@ -152,7 +141,7 @@ class TokenTest extends TestCase
     private function setupAssertion($assertion_class_name)
     {
         $nameId = new NameID();
-        $nameId->value = self::AN_IDENTIFIER;
+        $nameId->setValue(self::AN_IDENTIFIER);
         $this->assertion_nameId = $nameId;
         $this->assertion_attributes = [
             self::AN_IDENTIFIER_CLAIM_NAME => [
