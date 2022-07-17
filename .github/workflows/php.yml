@@ -10,7 +10,7 @@ on:
 
 jobs:
   php-library:
-    uses: equisoft-actions/php-workflows/.github/workflows/php-library.yml@v2
+    uses: equisoft-actions/php-workflows/.github/workflows/php-library.yml@v3
     with:
       checks: phpunit,psalm
       php-version: '7.4'
@@ -19,7 +19,7 @@ jobs:
       GPR_KEY: ${{ secrets.GPR_KEY }}
 
   php-library-8-1:
-    uses: equisoft-actions/php-workflows/.github/workflows/php-library.yml@v2
+    uses: equisoft-actions/php-workflows/.github/workflows/php-library.yml@v3
     with:
       checks: phpunit,psalm,qodana
       php-version: '8.1'
