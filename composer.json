@@ -19,7 +19,7 @@
     }
   },
   "require": {
-    "php": "^7.4 || ^8.1",
+    "php": "^8.1",
     "ext-dom": "*",
     "ext-openssl": "*",
     "simplesamlphp/saml2": "^4.1.9",
