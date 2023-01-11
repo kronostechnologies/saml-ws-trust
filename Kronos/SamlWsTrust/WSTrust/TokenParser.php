@@ -36,7 +36,7 @@ class TokenParser
         }
         $dom->loadXML($token_xml);
 
-        $xpath = new \DOMXpath($dom);
+        $xpath = new \DOMXPath($dom);
         $xpath->registerNamespace('wst', 'http://schemas.xmlsoap.org/ws/2005/02/trust');
         $xpath->registerNamespace('trust', 'http://docs.oasis-open.org/ws-sx/ws-trust/200512');
         $xpath->registerNamespace('saml', 'urn:oasis:names:tc:SAML:2.0:assertion');
