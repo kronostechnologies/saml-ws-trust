@@ -1,4 +1,4 @@
-name: PHP
+name: PHP Security
 
 on:
   pull_request: { }
@@ -9,10 +9,10 @@ on:
       - v*.*.*
 
 jobs:
-  php-library:
-    uses: equisoft-actions/php-workflows/.github/workflows/php-library.yml@v3
+  php-security:
+    uses: equisoft-actions/php-workflows/.github/workflows/php-security.yml@v3
     with:
-      checks: phpcs,phpunit,psalm
+      publish-reports: true
       php-version: '8.1'
       extensions: pcov
     secrets:
