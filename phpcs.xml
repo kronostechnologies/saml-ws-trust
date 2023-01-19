@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 <ruleset>
-    <file>Kronos</file>
-
     <rule ref="./vendor/kronostechnologies/php-coding-standard/phpcs.xml"/>
+
+    <exclude-pattern>Kronos/SamlWsTrust/SAML2/Random.php</exclude-pattern>
+    <exclude-pattern>Kronos/SamlWsTrust/WSTrust/ClaimInterface.php</exclude-pattern>
+    <exclude-pattern>Kronos/SamlWsTrust/WSTrust/Exception.php</exclude-pattern>
+    <exclude-pattern>Kronos/SamlWsTrust/WSTrust/ProviderInterface.php</exclude-pattern>
+    <exclude-pattern>Kronos/SamlWsTrust/WSTrust/Token.php</exclude-pattern>
+    <exclude-pattern>Kronos/SamlWsTrust/WSTrust/TokenValidator.php</exclude-pattern>
+    <exclude-pattern>Kronos/SamlWsTrust/WSTrust/TokenValidatorResponse.php</exclude-pattern>
+
+    <exclude-pattern>tests/Kronos/Tests/SamlWsTrust/TestCase.php</exclude-pattern>
+    <exclude-pattern>tests/Kronos/Tests/SamlWsTrust/WSTrust/TokenValidatorResponseTest.php</exclude-pattern>
+    <exclude-pattern>tests/Kronos/Tests/SamlWsTrust/WSTrust/TokenTest.php</exclude-pattern>
+    <exclude-pattern>tests/Kronos/Tests/SamlWsTrust/WSTrust/TokenParserTest.php</exclude-pattern>
+    <exclude-pattern>tests/Kronos/Tests/SamlWsTrust/WSTrust/TokenValidatorTest.php</exclude-pattern>
 </ruleset>
