@@ -3,7 +3,7 @@
     "github>kronostechnologies/standards:renovate-base"
   ],
 
-  reviewers: ["team:crm"],
+  reviewers: ["team:account"],
   labels: ["dependency-update"],
   rebaseWhen: "conflicted",
 
