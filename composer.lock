@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb1966f17540696c74db3e890f571643",
+    "content-hash": "59fb7db5e0fa73247757055a9597c8f2",
     "packages": [
         {
             "name": "psr/log",
@@ -100,16 +100,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v4.6.3",
+            "version": "v4.6.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "bfc9c79dd6b728a41d1de988f545f6e64728a51d"
+                "reference": "a6c46e8134df2686da9ad44bc9b8f85443c03440"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/bfc9c79dd6b728a41d1de988f545f6e64728a51d",
-                "reference": "bfc9c79dd6b728a41d1de988f545f6e64728a51d",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/a6c46e8134df2686da9ad44bc9b8f85443c03440",
+                "reference": "a6c46e8134df2686da9ad44bc9b8f85443c03440",
                 "shasum": ""
             },
             "require": {
@@ -152,9 +152,9 @@
             "description": "SAML2 PHP library from SimpleSAMLphp",
             "support": {
                 "issues": "https://github.com/simplesamlphp/saml2/issues",
-                "source": "https://github.com/simplesamlphp/saml2/tree/v4.6.3"
+                "source": "https://github.com/simplesamlphp/saml2/tree/v4.6.10"
             },
-            "time": "2022-06-13T14:04:10+00:00"
+            "time": "2023-05-31T16:03:51+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -2994,16 +2994,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.7.1",
+            "version": "3.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "1359e176e9307e906dc3d890bcc9603ff6d90619"
+                "reference": "ed8e00df0a83aa96acf703f8c2979ff33341f879"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/1359e176e9307e906dc3d890bcc9603ff6d90619",
-                "reference": "1359e176e9307e906dc3d890bcc9603ff6d90619",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/ed8e00df0a83aa96acf703f8c2979ff33341f879",
+                "reference": "ed8e00df0a83aa96acf703f8c2979ff33341f879",
                 "shasum": ""
             },
             "require": {
@@ -3039,14 +3039,15 @@
             "homepage": "https://github.com/squizlabs/PHP_CodeSniffer",
             "keywords": [
                 "phpcs",
-                "standards"
+                "standards",
+                "static analysis"
             ],
             "support": {
                 "issues": "https://github.com/squizlabs/PHP_CodeSniffer/issues",
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2022-06-18T07:21:10+00:00"
+            "time": "2023-02-22T23:07:41+00:00"
         },
         {
             "name": "symfony/console",
