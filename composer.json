@@ -22,8 +22,8 @@
     "php": "^8.1",
     "ext-dom": "*",
     "ext-openssl": "*",
-    "simplesamlphp/saml2": "^4.1.9",
-    "robrichards/xmlseclibs": "^3.1.0",
+    "simplesamlphp/saml2": "4.6.10",
+    "robrichards/xmlseclibs": "3.1.1",
     "ext-zlib": "*"
   },
   "require-dev": {
