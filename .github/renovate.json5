@@ -1,46 +1,4 @@
 {
-  extends: [
-    "github>kronostechnologies/standards:renovate-base"
-  ],
-
-  reviewers: ["team:account"],
-  labels: ["dependency-update"],
-  rebaseWhen: "conflicted",
-
-  packageRules: [
-    {
-      matchDatasources: ["docker"],
-      addLabels: ["docker"],
-    },
-    {
-      matchUpdateTypes: ["major"],
-      addLabels: ["major"],
-    },
-    {
-      matchUpdateTypes: ["minor"],
-      addLabels: ["minor"],
-    },
-    {
-      matchUpdateTypes: ["patch"],
-      addLabels: ["patch"],
-    },
-  ],
-
-  php: {
-    addLabels: ["php"],
-    packageRules: [
-      {
-        matchUpdateTypes: ["major", "minor", "patch"],
-        automerge: false,
-      },
-      {
-        matchUpdateTypes: ["minor"],
-        groupName: "PHP minors",
-      },
-      {
-        matchUpdateTypes: ["patch"],
-        groupName: "PHP patches",
-      },
-    ],
-  },
+    $schema: "https://docs.renovatebot.com/renovate-schema.json",
+    extends: ["local>kronostechnologies/renovate-config"],
 }
