@@ -2,6 +2,7 @@
 
 namespace Kronos\Tests\SamlWsTrust\WSTrust;
 
+use Exception;
 use Kronos\SamlWsTrust\WSTrust\Token;
 use Kronos\SamlWsTrust\WSTrust\TokenParser;
 use Kronos\Tests\SamlWsTrust\TestCase;
@@ -147,9 +148,11 @@ class TokenParserTest extends TestCase
     {
         $parser = new TokenParser('SAML_2_0');
 
-        $this->expectWarning();
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No assertion found element supported.');
 
-        $parser->parseToken("non xml doc");
+        // Ignore warning about invalid XML document
+        @$parser->parseToken("non xml doc");
     }
 
     public function test_ValidSAML20RSTP_parseToken_TokenInstanceContainsAssertion()
