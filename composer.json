@@ -37,6 +37,9 @@
     "allow-plugins": {
       "composer/package-versions-deprecated": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "platform": {
+      "php": "8.1"
     }
   }
 }
